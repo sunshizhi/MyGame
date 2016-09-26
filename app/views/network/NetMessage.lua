@@ -6,6 +6,10 @@ NetMessage = {
     
     ["ping"       ] =  {},    -- 心跳
     ["login"      ] = {function (data) Login:loginRec(data) end},    -- 登录
+    ["logout"     ] = {function (data) Login:logoutRec(data) end},    -- 退出
+    ["begin"      ] = {function (data) PlayScene:beginRec(data) end},    -- 游戏开始
+    ["whoStart"  ] = {function (data) PlayScene:whoStartRec(data) end},    -- 谁先出牌
     ["putCard"   ] = {function (data) PlayScene:putCardRec(data) end},    -- 出牌
-    ["overRound" ] = {function (data) PlayScene:overRoundRec(data) end},    -- 结束回合
+    ["giveUp"   ] = {function (data) PlayScene:giveUpRec(data) end},    -- 投降
+    ["gameOver" ] = {function (data) PlayScene:gameOverRec(data) end},    -- 游戏结束
 }

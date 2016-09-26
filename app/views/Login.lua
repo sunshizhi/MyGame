@@ -5,27 +5,26 @@
 Login = class("Login")
 import "src.app.models.Player"
 import "src.app.views.PlayScene"
+import "src.app.config.cardConfig"
 
-Login.name = "b"
+Login.name = "a"
+Login.roomId = "333"
     
 function Login:ctor(...)
 end
 
 function Login:login(name, roomId)
-    local t = os.time()
-    while os.time() - t < 2 do
-        if os.time() - t == 1 then
-            break
-        end
-    end
-
-    local data = {type = 'login', client_name = name .. "", room_id = roomId .. ""}
-    Net:sendMsg(data)
+    delayCallFunc(1, 2, function() 
+        local data = {type = 'login', client_name = name .. "", room_id = roomId .. ""}
+        Net:sendMsg(data)
+    end)
 end
 
 function Login:loginRec(data)
     local client_name = data.client_name
     local client_list = data.client_list
+    local who_start = data.who_start
+
     if Player.id == 0 then
         Player.id = data.client_id
         Player.name = client_name
@@ -37,12 +36,14 @@ function Login:loginRec(data)
         end
         --代表已经有玩家在等待
         if client_list_num >1 then
+            Player.last_one = 1
             --获取在等待玩家的信息
             self:getOtherPlayerInfo(client_list)
         end
     else
         OtherPlayer.name = client_name
         print("玩家" .. client_name .. "加入游戏")
+        addTipLabel("玩家" .. client_name .. "加入游戏")
         PlayScene:playerJoin(client_name)
     end
 end
@@ -56,6 +57,12 @@ function Login:getOtherPlayerInfo(list)
             break
         end
     end
+end
+
+--退出
+function Login:logoutRec(data)
+    local client_name = data.from_client_name
+    addTipLabel("玩家" .. client_name .. "退出游戏！")
 end
 
 return Login

@@ -34,7 +34,7 @@ function Net:init()
         local type = data.type
 
         if type ~= nil then
-            if NetMessage[type] ~= "ping" and NetMessage[type] ~= "close" then
+            if type ~= "close" then
                 if NetMessage[type][1] ~= nil then
                     NetMessage[type][1](data)
                 end
@@ -67,7 +67,7 @@ function Net:sendMsg(data)
         wsSendText:sendString(jsonTest)
     else
         print("connect failed")
-        Login:login(Login.name, "111")
+        Login:login(Login.name, Login.roomId)
     end
 end
 

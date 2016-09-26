@@ -77,4 +77,71 @@ function tableToString(t)
  	return retstr
 end
 
---
+--延迟执行 time:到第几秒执行 end_t:循环多久
+function delayCallFunc(time, end_t, func)
+    local t = os.time()
+    while os.time() - t < end_t do
+        if os.time() - t == time then
+            func()
+            break
+        end
+    end
+end
+
+function setWidgetAllGray(node,bNor)
+	local state=1
+
+	if bNor then
+		state=0
+	end
+
+    if tolua.type(node) == "ccui.Text" then
+       node:setColor(cc.c3b(191,191,191))
+       return
+    end
+
+	node:getVirtualRenderer():setState(state)
+	cclog(node:getName().." state=%d",state)
+
+	local children=node:getChildren()
+	for k,v in pairs(children) do
+        setWidgetAllGray(v,bNor)
+	end
+end
+
+--获取卡牌id
+function getCardsId()
+    local N = 22
+	local array = {}
+    local noHaveList = {}
+    local rs = {}
+	for i = 1 , N do
+		array[i] = i
+	end
+
+	math.randomseed(os.time())
+	for i = 1 , 10 do
+		local j = math.random(N - i + 1) + i - 1;
+		array[i],array[j] = array[j],array[i]
+	end
+
+	for i = 1 , 10 do
+        table.insert(rs, array[i])
+	end
+
+    for j = 1 , N do
+        local noHave = true
+        local res = array[j]
+        for i = 1, 10 do
+            local child = rs[i]
+            if child == res then
+                noHave = false
+            end
+        end
+        if noHave then
+            table.insert(noHaveList, res)
+        end
+    end
+
+    return rs, noHaveList
+end

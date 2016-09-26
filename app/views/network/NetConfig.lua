@@ -2,4 +2,4 @@
 --Author : ssz
 --Date   : 2016/9/10
 --网络配置
-server_host = "ws://127.0.0.1:7272"
+server_host = "ws://119.29.56.13:7272"

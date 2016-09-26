@@ -14,7 +14,7 @@ function MainScene:onCreate()
 
     if Player.id == 0 then
         if Net:init() then
-            Login:login(Login.name, "111")
+            Login:login(Login.name, Login.roomId)
         end
     end
 end 
